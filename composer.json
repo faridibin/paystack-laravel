@@ -1,0 +1,43 @@
+{
+	"name": "faridibin/paystack-laravel",
+	"description": "A Laravel wrapper for faridibin/paystack-php with first-class Laravel features including facades, config files, database migrations, and webhook handling. Provides seamless integration of Paystack payment processing in Laravel applications.",
+	"keywords": [
+		"php",
+		"laravel",
+		"paystack"
+	],
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Faridibin\\PaystackLaravel\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Faridibin\\PaystackLaravel\\Tests\\": "tests/"
+		}
+	},
+	"authors": [
+		{
+			"name": "Farid Adam",
+			"email": "faridibin@gmail.com",
+			"homepage": "https://faridibin.tech/"
+		}
+	],
+	"require": {
+		"php": "^8.0",
+		"faridibin/paystack-php": "^0.1.0",
+		"illuminate/support": "^11.34"
+	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
+	"config": {
+		"sort-packages": true,
+		"preferred-install": "dist",
+		"optimize-autoloader": true
+	},
+	"require-dev": {
+		"orchestra/testbench": "^9.6"
+	}
+}
