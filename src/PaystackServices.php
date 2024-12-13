@@ -57,8 +57,9 @@ class PaystackServices
      */
     public static function enabled(string $service): bool
     {
-        // TODO: Implement enabled() method.
-        return true;
+        $enabledServices = static::getEnabledServices();
+
+        return isset($enabledServices[$service]);
     }
 
     public static function serviceEnabled(string $service): bool
