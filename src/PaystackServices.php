@@ -130,8 +130,12 @@ class PaystackServices
     /**
      * Enable the integration service.
      */
-    public static function integration(): array
+    public static function integration(bool $enable = true): array
     {
+        if (!$enable) {
+            return [];
+        }
+
         return [
             'integration' => [Services\Integration::class, Contracts\Services\IntegrationInterface::class]
         ];
@@ -140,8 +144,12 @@ class PaystackServices
     /**
      * Enable the verification service.
      */
-    public static function verification(): array
+    public static function verification(bool $enable = true): array
     {
+        if (!$enable) {
+            return [];
+        }
+
         return [
             'verification' => [Services\Verification::class, Contracts\Services\VerificationInterface::class]
         ];
@@ -150,8 +158,12 @@ class PaystackServices
     /**
      * Enable the miscellaneous service.
      */
-    public static function miscellaneous(): array
+    public static function miscellaneous(bool $enable = true): array
     {
+        if (!$enable) {
+            return [];
+        }
+
         return [
             'miscellaneous' => [Services\Miscellaneous::class, Contracts\Services\MiscellaneousInterface::class]
         ];
