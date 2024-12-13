@@ -57,8 +57,9 @@ class PaystackServices
      */
     public static function enabled(string $service): bool
     {
-        // TODO: Implement enabled() method.
-        return true;
+        $enabledServices = static::getEnabledServices();
+
+        return isset($enabledServices[$service]);
     }
 
     public static function serviceEnabled(string $service): bool
@@ -91,7 +92,7 @@ class PaystackServices
      */
     public static function commerce(array $services = []): array
     {
-        return static::enableService($services, static::$commerceServices);
+        return static::enableService(static::$commerceServices, $services);
     }
 
     /**
@@ -102,7 +103,7 @@ class PaystackServices
      */
     public static function payments(array $services = []): array
     {
-        return static::enableService($services, static::$paymentServices);
+        return static::enableService(static::$paymentServices, $services);
     }
 
     /**
@@ -113,7 +114,7 @@ class PaystackServices
      */
     public static function recurring(array $services = []): array
     {
-        return static::enableService($services, static::$recurringServices);
+        return static::enableService(static::$recurringServices, $services);
     }
 
     /**
@@ -124,7 +125,7 @@ class PaystackServices
      */
     public static function transfers(array $services = []): array
     {
-        return static::enableService($services, static::$transferServices);
+        return static::enableService(static::$transferServices, $services);
     }
 
     /**
@@ -172,11 +173,11 @@ class PaystackServices
     /**
      * Enable the given services.
      *
-     * @param array<string, bool> $requested
      * @param array<string, array> $available
+     * @param array<string, bool> $requested
      * @return array<string, array>
      */
-    protected static function enableService(array $requested = [], array $available): array
+    protected static function enableService(array $available, array $requested = []): array
     {
         if (empty($requested)) {
             return $available;
