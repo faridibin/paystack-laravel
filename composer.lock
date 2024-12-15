@@ -512,16 +512,16 @@
         },
         {
             "name": "faridibin/paystack-php",
-            "version": "v0.1.1",
+            "version": "v0.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/faridibin/paystack-php.git",
-                "reference": "53d08da045924006d8f9b5b0d55f89f185649dc8"
+                "reference": "4c98f66069cba101e5d68fef0cdd4d958a92614d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/faridibin/paystack-php/zipball/53d08da045924006d8f9b5b0d55f89f185649dc8",
-                "reference": "53d08da045924006d8f9b5b0d55f89f185649dc8",
+                "url": "https://api.github.com/repos/faridibin/paystack-php/zipball/4c98f66069cba101e5d68fef0cdd4d958a92614d",
+                "reference": "4c98f66069cba101e5d68fef0cdd4d958a92614d",
                 "shasum": ""
             },
             "require": {
@@ -557,9 +557,9 @@
             "description": "A modern, type-safe PHP SDK for Paystack payment processing",
             "support": {
                 "issues": "https://github.com/faridibin/paystack-php/issues",
-                "source": "https://github.com/faridibin/paystack-php/tree/v0.1.1"
+                "source": "https://github.com/faridibin/paystack-php/tree/v0.1.2"
             },
-            "time": "2024-12-10T04:07:37+00:00"
+            "time": "2024-12-15T16:48:37+00:00"
         },
         {
             "name": "fruitcake/php-cors",
@@ -6809,16 +6809,16 @@
         },
         {
             "name": "orchestra/testbench-core",
-            "version": "v9.7.3",
+            "version": "v9.8.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/orchestral/testbench-core.git",
-                "reference": "7eb65df1c4bcf6b761f075006c9d8848dacddea6"
+                "reference": "7717d92054493096f14d21fc06ec6c43db7a2f3a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/7eb65df1c4bcf6b761f075006c9d8848dacddea6",
-                "reference": "7eb65df1c4bcf6b761f075006c9d8848dacddea6",
+                "url": "https://api.github.com/repos/orchestral/testbench-core/zipball/7717d92054493096f14d21fc06ec6c43db7a2f3a",
+                "reference": "7717d92054493096f14d21fc06ec6c43db7a2f3a",
                 "shasum": ""
             },
             "require": {
@@ -6843,6 +6843,7 @@
                 "mockery/mockery": "^1.6.10",
                 "phpstan/phpstan": "^2.0",
                 "phpunit/phpunit": "^10.5.35 || ^11.3.6",
+                "spatie/laravel-ray": "^1.39",
                 "symfony/process": "^7.0.3",
                 "symfony/yaml": "^7.0.3",
                 "vlucas/phpdotenv": "^5.6.1"
@@ -6897,7 +6898,7 @@
                 "issues": "https://github.com/orchestral/testbench/issues",
                 "source": "https://github.com/orchestral/testbench-core"
             },
-            "time": "2024-12-14T01:53:15+00:00"
+            "time": "2024-12-15T14:14:32+00:00"
         },
         {
             "name": "orchestra/workbench",
