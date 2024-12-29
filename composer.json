@@ -27,7 +27,7 @@
 	],
 	"require": {
 		"php": "^8.0",
-		"faridibin/paystack-php": "^0.1.0",
+		"faridibin/paystack-php": "dev-development",
 		"illuminate/support": "^11.34"
 	},
 	"minimum-stability": "dev",
