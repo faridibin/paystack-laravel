@@ -37,6 +37,12 @@ class PaystackServiceProvider extends ServiceProvider
 
         $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
 
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'paystack');
+
+        $this->publishes([
+            __DIR__ . '/../resources/views' => resource_path('views/vendor/paystack'),
+        ]);
+
         // $this->publishes([
         //     __DIR__ . '/../database/migrations' => database_path('migrations'),
         // ], 'paystack-migrations');

@@ -2,6 +2,10 @@
 
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
+use Faridibin\Paystack\Exceptions\PaystackException;
+use Faridibin\PaystackLaravel\Facades\Paystack;
+use Illuminate\Contracts\View\View;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -24,8 +28,20 @@ class TransactionController extends Controller
      * 
      * @return void
      */
-    public function fetch(Request $request, int $id)
+    public function fetch(Request $request, int $id): JsonResponse|View
     {
-        // 
+        $response = Paystack::transactions()->fetch($id);
+
+        if (!$response->getStatus()) {
+            throw new PaystackException('Transaction not found');
+        }
+
+        $transaction = $response->getData()->toArray();
+
+        if ($request->expectsJson()) {
+            return response()->json($transaction);
+        }
+
+        return view('transactions.show', compact('transaction'));
     }
 }

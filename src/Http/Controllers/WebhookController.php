@@ -2,6 +2,7 @@
 
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
+use Faridibin\PaystackLaravel\Http\Middleware\ValidateWebhookSignature;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -13,7 +14,7 @@ class WebhookController extends Controller
      */
     public function __construct()
     {
-        $this->middleware();
+        $this->middleware(ValidateWebhookSignature::class);
     }
 
     public function handle(Request $request)
