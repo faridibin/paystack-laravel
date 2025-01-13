@@ -36,12 +36,12 @@ class TransactionController extends Controller
             throw new PaystackException('Transaction not found');
         }
 
-        $transaction = $response->getData()->toArray();
+        $transaction = $response->getData();
 
         if ($request->expectsJson()) {
-            return response()->json($transaction);
+            return response()->json($transaction->toArray());
         }
 
-        return view('transactions.show', compact('transaction'));
+        return view('paystack::transactions.show', $transaction->asObject());
     }
 }
