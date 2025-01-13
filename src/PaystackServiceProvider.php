@@ -35,6 +35,8 @@ class PaystackServiceProvider extends ServiceProvider
             __DIR__ . '/../config/paystack.php' => config_path('paystack.php'),
         ], 'paystack-config');
 
+        $this->loadRoutesFrom(__DIR__ . '/../routes/web.php');
+
         // $this->publishes([
         //     __DIR__ . '/../database/migrations' => database_path('migrations'),
         // ], 'paystack-migrations');
