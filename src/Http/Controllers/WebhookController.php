@@ -4,6 +4,7 @@ namespace Faridibin\PaystackLaravel\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
+use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
@@ -27,6 +28,8 @@ class WebhookController extends Controller
     public function handle(Request $request)
     {
         // 
-        dd($request->all());
+        dump($request->all());
+
+        return new Response('Webhook Handled', 200);
     }
 }

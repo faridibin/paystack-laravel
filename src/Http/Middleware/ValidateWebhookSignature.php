@@ -17,13 +17,22 @@ class ValidateWebhookSignature
      */
     public function handle(Request $request, Closure $next): Response
     {
+        if (!$request->isMethod('POST') || !$request->hasHeader('X-Paystack-Signature')) {
+            throw new AccessDeniedHttpException('Invalid request method or missing signature');
+        }
+
+        $signature = $request->header('X-Paystack-Signature');
+
+        $payload = $request->getContent();
+
+        dump($payload, $signature);
+
         try {
-            // WebhookSignature::verifyHeader(
-            //     $request->getContent(),
-            //     $request->header('Stripe-Signature'),
-            //     config('cashier.webhook.secret'),
-            //     config('cashier.webhook.tolerance')
-            // );
+            Webhook::validateSignature(
+                $request->getContent(),
+                $request->header('X-Paystack-Signature'),
+                config('paystack.secret_key')
+            )->isIpWhitelisted($request->ip());
         } catch (PaystackException $exception) {
             throw new AccessDeniedHttpException($exception->getMessage(), $exception);
         }
