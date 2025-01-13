@@ -1,6 +1,7 @@
 <?php
 
 use Faridibin\Paystack\Enums\Currency;
+use Faridibin\PaystackLaravel\Http\Middleware\ValidateWebhookSignature;
 use Faridibin\PaystackLaravel\PaystackServices;
 
 return  [
@@ -74,4 +75,26 @@ return  [
         PaystackServices::verification(),
         PaystackServices::miscellaneous(),
     ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Route Middleware
+    |--------------------------------------------------------------------------
+    |
+    | This value is an array of middleware that will be applied to the Paystack
+    | routes. You can add your own middleware to this array if you want to
+    | apply them to the Paystack routes.
+    |
+    */
+
+    'middleware' => [
+
+        'transaction.fetch' => [
+            'web'
+        ],
+
+        'webhook.handle' => [
+            ValidateWebhookSignature::class
+        ]
+    ]
 ];
