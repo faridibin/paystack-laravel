@@ -176,6 +176,10 @@
 			color: #047857;
 		}
 
+		.field-value.error {
+			color: #dc2626;
+		}
+
         @media (max-width: 768px) {
             .grid {
                 grid-template-columns: 1fr;
@@ -190,17 +194,19 @@
             <div class="card-header">
                 <div class="card-header-content">
                     <h2 class="card-title">Transaction Details</h2>
-                    <span class="status-badge status-success">Success</span>
+                    <span class="status-badge status-{{ $transaction->status === 'success' ? 'success' : 'error' }}">
+                        {{ ucfirst($transaction->status) }}
+                    </span>
                 </div>
             </div>
             <div class="card-content grid">
                 <div class="field">
                     <span class="field-label">Amount</span>
-                    <span class="field-value">GHS 480.00</span>
+                    <span class="field-value">{{ $transaction->currency }} {{ number_format($transaction->amount / 100, 2) }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Reference</span>
-                    <span class="field-value monospace">SUB_Z3MdUA_20250106030848</span>
+                    <span class="field-value monospace">{{ $transaction->reference }}</span>
                 </div>
             </div>
         </div>
@@ -213,19 +219,19 @@
             <div class="card-content grid">
                 <div class="field">
                     <span class="field-label">Card Type</span>
-                    <span class="field-value">VISA</span>
+                    <span class="field-value">{{ strtoupper($transaction->authorization->card_type) }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Last 4 Digits</span>
-                    <span class="field-value">**** 4081</span>
+                    <span class="field-value">**** {{ $transaction->authorization->last4 }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Bank</span>
-                    <span class="field-value">TEST BANK</span>
+                    <span class="field-value">{{ $transaction->authorization->bank }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Authorization Code</span>
-                    <span class="field-value monospace">AUTH_3etycnrz44</span>
+                    <span class="field-value monospace">{{ $transaction->authorization->authorization_code }}</span>
                 </div>
             </div>
         </div>
@@ -238,19 +244,19 @@
             <div class="card-content grid">
                 <div class="field">
                     <span class="field-label">Name</span>
-                    <span class="field-value">Farid Adam</span>
+                    <span class="field-value">{{ $transaction->customer->first_name }} {{ $transaction->customer->last_name }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Email</span>
-                    <span class="field-value">faridibin@gmail.com</span>
+                    <span class="field-value">{{ $transaction->customer->email }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Phone</span>
-                    <span class="field-value">4384093865</span>
+                    <span class="field-value">{{ $transaction->customer->phone }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Customer Code</span>
-                    <span class="field-value monospace">CUS_ed7kwh4zbmxqm21</span>
+                    <span class="field-value monospace">{{ $transaction->customer->customer_code }}</span>
                 </div>
             </div>
         </div>
@@ -263,17 +269,17 @@
             <div class="card-content">
                 <div class="field">
                     <span class="field-label">Plan Name</span>
-                    <span class="field-value">Pro Plan</span>
-                    <p class="description">The Pro Plan is designed for businesses looking to scale and streamline their invoicing operations.</p>
+                    <span class="field-value">{{ $transaction->plan->name }}</span>
+                    <p class="description">{{ $transaction->plan->description }}</p>
                 </div>
                 <div class="grid" style="margin-top: 20px;">
                     <div class="field">
                         <span class="field-label">Amount</span>
-                        <span class="field-value">GHS 480.00</span>
+                        <span class="field-value">{{ $transaction->currency }} {{ number_format($transaction->plan->amount / 100, 2) }}</span>
                     </div>
                     <div class="field">
                         <span class="field-label">Billing Interval</span>
-                        <span class="field-value">Annually</span>
+                        <span class="field-value">{{ ucfirst($transaction->plan->interval) }}</span>
                     </div>
                 </div>
             </div>
@@ -287,50 +293,54 @@
             <div class="card-content grid">
                 <div class="field">
                     <span class="field-label">Created At</span>
-                    <span class="field-value">2025-01-06 03:08:48</span>
+                    <span class="field-value">{{ $transaction->createdAt }}</span>
                 </div>
                 <div class="field">
                     <span class="field-label">Paid At</span>
-                    <span class="field-value">2025-01-06 03:08:53</span>
+                    <span class="field-value">{{ $transaction->paidAt }}</span>
                 </div>
             </div>
         </div>
 
-		<!-- Activity Log -->
-		<div class="card">
-			<div class="card-header">
-				<h2 class="card-title">Activity Log</h2>
-			</div>
-			<div class="card-content">
-				@foreach($transaction->log->history as $activity)
-<li class="activity-item">
-    <div class="timeline-line"></div>
-    <div class="activity-dot {{ $activity->type === 'success' ? 'success' : '' }}"></div>
-    <div class="activity-content">
-        <p>{{ $activity->message }}</p>
-    </div>
-    <time class="activity-time">{{ $activity->time }}s</time>
-</li>
-@endforeach
+        <!-- Activity Log -->
+        <div class="card">
+            <div class="card-header">
+                <h2 class="card-title">Activity Log</h2>
+            </div>
+            <div class="card-content">
+                <div class="activity-feed">
+                    <ul class="activity-list">
+                        @foreach($transaction->log->history as $activity)
+                        <li class="activity-item">
+                            <div class="timeline-line"></div>
+                            <div class="activity-dot {{ $activity->type === 'success' ? 'success' : '' }}"></div>
+                            <div class="activity-content">
+                                <p>{{ $activity->message }}</p>
+                            </div>
+                            <time class="activity-time">{{ $activity->time }}s</time>
+                        </li>
+                        @endforeach
+                    </ul>
+                </div>
 
-<div class="activity-summary">
-    <div class="summary-item">
-        <span class="field-label">Time Spent</span>
-        <span class="field-value">{{ $transaction->log->time_spent }} seconds</span>
-    </div>
-    <div class="summary-item">
-        <span class="field-label">Attempts</span>
-        <span class="field-value">{{ $transaction->log->attempts }}</span>
-    </div>
-    <div class="summary-item">
-        <span class="field-label">Status</span>
-        <span class="field-value {{ $transaction->log->success ? 'success' : '' }}">
-            {{ $transaction->log->success ? 'Success' : 'Failed' }}
-        </span>
-    </div>
-</div>
-			</div>
-		</div>
+                <div class="activity-summary">
+                    <div class="summary-item">
+                        <span class="field-label">Time Spent</span>
+                        <span class="field-value">{{ $transaction->log->time_spent }} seconds</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="field-label">Attempts</span>
+                        <span class="field-value">{{ $transaction->log->attempts }}</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="field-label">Status</span>
+                        <span class="field-value {{ $transaction->log->success ? 'success' : 'error' }}">
+                            {{ $transaction->log->success ? 'Success' : 'Failed' }}
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </body>
 </html>

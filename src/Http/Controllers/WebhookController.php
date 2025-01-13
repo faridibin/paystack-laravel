@@ -2,7 +2,6 @@
 
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
-use Faridibin\PaystackLaravel\Http\Middleware\ValidateWebhookSignature;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
@@ -14,11 +13,20 @@ class WebhookController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(ValidateWebhookSignature::class);
+        $middleware = config('paystack.middleware');
+
+        $this->middleware($middleware['webhook.handle'] ?? ['web']);
     }
 
+    /**
+     * Handle the incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
     public function handle(Request $request)
     {
         // 
+        dd($request->all());
     }
 }

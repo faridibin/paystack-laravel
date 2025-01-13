@@ -17,7 +17,9 @@ class TransactionController extends Controller
      */
     public function __construct()
     {
-        // 
+        $middleware = config('paystack.middleware');
+
+        $this->middleware($middleware['transaction.fetch'] ?? ['web']);
     }
 
     /**
@@ -42,6 +44,8 @@ class TransactionController extends Controller
             return response()->json($transaction->toArray());
         }
 
-        return view('paystack::transactions.show', $transaction->asObject());
+        return view('paystack::transactions.show', [
+            'transaction' => $transaction->asObject(),
+        ]);
     }
 }
