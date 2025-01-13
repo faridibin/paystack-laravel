@@ -29,6 +29,8 @@ class ValidateWebhookSignature
                 config('paystack.secret_key')
             )->isIpWhitelisted($request->ip());
         } catch (PaystackException $exception) {
+            dump($exception);
+
             throw new AccessDeniedHttpException($exception->getMessage(), $exception);
         }
 
