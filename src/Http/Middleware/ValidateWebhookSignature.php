@@ -4,6 +4,7 @@ namespace Faridibin\PaystackLaravel\Http\Middleware;
 
 use Closure;
 use Faridibin\Paystack\Exceptions\PaystackException;
+use Faridibin\Paystack\Webhook;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
@@ -20,12 +21,6 @@ class ValidateWebhookSignature
         if (!$request->isMethod('POST') || !$request->hasHeader('X-Paystack-Signature')) {
             throw new AccessDeniedHttpException('Invalid request method or missing signature');
         }
-
-        $signature = $request->header('X-Paystack-Signature');
-
-        $payload = $request->getContent();
-
-        dump($payload, $signature);
 
         try {
             Webhook::validateSignature(
