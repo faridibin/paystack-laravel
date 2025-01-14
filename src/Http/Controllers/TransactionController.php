@@ -17,7 +17,7 @@ class TransactionController extends Controller
      */
     public function __construct()
     {
-        $middleware = config('paystack.middleware');
+        $middleware = config('paystack.routes.middleware');
 
         $this->middleware($middleware['transaction.fetch'] ?? ['web']);
     }

@@ -78,23 +78,40 @@ return  [
 
     /*
     |--------------------------------------------------------------------------
-    | Route Middleware
+    | Paystack Routes
     |--------------------------------------------------------------------------
     |
-    | This value is an array of middleware that will be applied to the Paystack
-    | routes. You can add your own middleware to this array if you want to
-    | apply them to the Paystack routes.
+    | This value is an array of configurations for the Paystack routes. You can
+    | enable or disable the routes and also add middleware to the routes.
     |
     */
 
-    'middleware' => [
+    'routes' => [
 
-        'transaction.fetch' => [
-            'web'
-        ],
+        'enabled' => true,
 
-        'webhook.handle' => [
-            ValidateWebhookSignature::class
+        /*
+        |--------------------------------------------------------------------------
+        | Route Middleware
+        |--------------------------------------------------------------------------
+        |
+        | This value is an array of middleware that will be applied to the Paystack
+        | routes. You can add your own middleware to this array if you want to
+        | apply them to the Paystack routes.
+        |
+        */
+
+        'middleware' => [
+
+            'transaction.fetch' => [
+                'web'
+            ],
+
+            'webhook.handle' => [
+                ValidateWebhookSignature::class
+            ]
         ]
-    ]
+    ],
+
+
 ];
