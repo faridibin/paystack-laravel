@@ -2,7 +2,6 @@
 
 namespace Faridibin\PaystackLaravel\Http\Requests;
 
-use Faridibin\PaystackLaravel\Enums\WebhookEvent;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
