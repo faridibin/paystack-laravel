@@ -4,7 +4,15 @@ namespace Faridibin\PaystackLaravel\Http\Controllers\Concerns;
 
 use Faridibin\PaystackLaravel\Events\{
     ChargeDisputeCreateEvent,
-    ChargeSuccessEvent
+    ChargeDisputeRemindEvent,
+    ChargeDisputeResolveEvent,
+    ChargeSuccessEvent,
+    CustomeridentificationFailedEvent,
+    CustomeridentificationSuccessEvent,
+    DedicatedaccountAssignFailedEvent,
+    DedicatedaccountAssignSuccessEvent,
+    InvoiceCreateEvent,
+    InvoicePaymentFailedEvent,
 };
 use Symfony\Component\HttpFoundation\Response;
 
@@ -41,6 +49,8 @@ trait HandlesWebhookEvents
      */
     protected function onChargeDisputeRemind(array $payload): Response
     {
+        ChargeDisputeRemindEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -49,6 +59,8 @@ trait HandlesWebhookEvents
      */
     protected function onChargeDisputeResolve(array $payload): Response
     {
+        ChargeDisputeResolveEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -57,6 +69,8 @@ trait HandlesWebhookEvents
      */
     protected function onCustomeridentificationFailed(array $payload): Response
     {
+        CustomeridentificationFailedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -65,6 +79,8 @@ trait HandlesWebhookEvents
      */
     protected function onCustomeridentificationSuccess(array $payload): Response
     {
+        CustomeridentificationSuccessEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -73,6 +89,8 @@ trait HandlesWebhookEvents
      */
     protected function onDedicatedaccountAssignFailed(array $payload): Response
     {
+        DedicatedaccountAssignFailedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -81,6 +99,8 @@ trait HandlesWebhookEvents
      */
     protected function onDedicatedaccountAssignSuccess(array $payload): Response
     {
+        DedicatedaccountAssignSuccessEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -89,6 +109,8 @@ trait HandlesWebhookEvents
      */
     protected function onInvoiceCreate(array $payload): Response
     {
+        InvoiceCreateEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -97,6 +119,8 @@ trait HandlesWebhookEvents
      */
     protected function onInvoicePaymentFailed(array $payload): Response
     {
+        InvoicePaymentFailedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
