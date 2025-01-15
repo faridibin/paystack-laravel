@@ -3,6 +3,7 @@
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
 use Faridibin\PaystackLaravel\Events\{WebhookReceived, WebhookHandled};
+use Faridibin\PaystackLaravel\Http\Controllers\Concerns\HandlesWebhookEvents;
 use Faridibin\PaystackLaravel\Http\Requests\WebhookRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
@@ -10,6 +11,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
+    use HandlesWebhookEvents;
+
     /**
      * Create a new controller instance.
      * @return void
@@ -55,6 +58,8 @@ class WebhookController extends Controller
     private function method(string $event): string
     {
         $string = Str::of($event)->replace('.', ' ')->ucfirst()->camel();
+
+        dd(ucfirst($string));
 
         return sprintf('on%s', ucfirst($string));
     }
