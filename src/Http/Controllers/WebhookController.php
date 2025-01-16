@@ -2,7 +2,9 @@
 
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
+use Faridibin\Paystack\Enums\WebhookEvent;
 use Faridibin\PaystackLaravel\Events\{WebhookReceived, WebhookHandled};
+use Faridibin\PaystackLaravel\Http\Controllers\Concerns\HandlesWebhookEvents;
 use Faridibin\PaystackLaravel\Http\Requests\WebhookRequest;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
@@ -10,6 +12,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class WebhookController extends Controller
 {
+    use HandlesWebhookEvents;
+
     /**
      * Create a new controller instance.
      * @return void
@@ -29,21 +33,43 @@ class WebhookController extends Controller
      */
     public function handle(WebhookRequest $request): Response
     {
-        $payload = $request->safe()->all();
+        $webhookEvent = WebhookEvent::tryFrom($request->event);
 
-        WebhookReceived::dispatch($payload);
+        WebhookReceived::dispatch($webhookEvent, $request->data);
 
         $method = $this->method($request->event);
 
         if (method_exists($this, $method)) {
             $response = $this->{$method}($request->data);
 
-            WebhookHandled::dispatch($payload);
+            WebhookHandled::dispatch($webhookEvent, $request->data);
 
             return $response;
         }
 
+        return $this->handleMissingMethod();
+    }
+
+    /**
+     * Handle successful calls on the controller.
+     *
+     * @param  array  $parameters
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function successMethod(array $parameters = []): Response
+    {
         return new Response('Webhook Handled', 200);
+    }
+
+    /**
+     * Handle calls to missing methods on the controller.
+     *
+     * @param  array  $parameters
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    protected function handleMissingMethod(array $parameters = []): Response
+    {
+        return new Response;
     }
 
     /**
