@@ -3,16 +3,30 @@
 namespace Faridibin\PaystackLaravel\Http\Controllers\Concerns;
 
 use Faridibin\PaystackLaravel\Events\{
-    ChargeDisputeCreateEvent,
+    ChargeDisputeCreatedEvent,
     ChargeDisputeRemindEvent,
-    ChargeDisputeResolveEvent,
+    ChargeDisputeResolvedEvent,
     ChargeSuccessEvent,
     CustomeridentificationFailedEvent,
     CustomeridentificationSuccessEvent,
     DedicatedaccountAssignFailedEvent,
     DedicatedaccountAssignSuccessEvent,
-    InvoiceCreateEvent,
+    InvoiceCreatedEvent,
     InvoicePaymentFailedEvent,
+    InvoiceUpdateEvent,
+    PaymentrequestPendingEvent,
+    PaymentrequestSucceededEvent,
+    RefundFailedEvent,
+    RefundPendingEvent,
+    RefundProcessedEvent,
+    RefundProcessingEvent,
+    SubscriptionCreatedEvent,
+    SubscriptionDisabledEvent,
+    SubscriptionExpiringCardsEvent,
+    SubscriptionNotRenewedEvent,
+    TransferFailedEvent,
+    TransferReversedEvent,
+    TransferSucceededEvent,
 };
 use Symfony\Component\HttpFoundation\Response;
 
@@ -39,7 +53,7 @@ trait HandlesWebhookEvents
      */
     protected function onChargeDisputeCreate(array $payload): Response
     {
-        ChargeDisputeCreateEvent::dispatch($payload);
+        ChargeDisputeCreatedEvent::dispatch($payload);
 
         return $this->successMethod();
     }
@@ -59,7 +73,7 @@ trait HandlesWebhookEvents
      */
     protected function onChargeDisputeResolve(array $payload): Response
     {
-        ChargeDisputeResolveEvent::dispatch($payload);
+        ChargeDisputeResolvedEvent::dispatch($payload);
 
         return $this->successMethod();
     }
@@ -109,7 +123,7 @@ trait HandlesWebhookEvents
      */
     protected function onInvoiceCreate(array $payload): Response
     {
-        InvoiceCreateEvent::dispatch($payload);
+        InvoiceCreatedEvent::dispatch($payload);
 
         return $this->successMethod();
     }
@@ -129,6 +143,8 @@ trait HandlesWebhookEvents
      */
     protected function onInvoiceUpdate(array $payload): Response
     {
+        InvoiceUpdateEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -137,6 +153,8 @@ trait HandlesWebhookEvents
      */
     protected function onPaymentrequestPending(array $payload): Response
     {
+        PaymentrequestPendingEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -145,6 +163,8 @@ trait HandlesWebhookEvents
      */
     protected function onPaymentrequestSuccess(array $payload): Response
     {
+        PaymentrequestSucceededEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -153,6 +173,8 @@ trait HandlesWebhookEvents
      */
     protected function onRefundFailed(array $payload): Response
     {
+        RefundFailedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -161,6 +183,8 @@ trait HandlesWebhookEvents
      */
     protected function onRefundPending(array $payload): Response
     {
+        RefundPendingEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -169,6 +193,8 @@ trait HandlesWebhookEvents
      */
     protected function onRefundProcessed(array $payload): Response
     {
+        RefundProcessedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -177,6 +203,8 @@ trait HandlesWebhookEvents
      */
     protected function onRefundProcessing(array $payload): Response
     {
+        RefundProcessingEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -185,6 +213,8 @@ trait HandlesWebhookEvents
      */
     protected function onSubscriptionCreate(array $payload): Response
     {
+        SubscriptionCreatedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -193,6 +223,8 @@ trait HandlesWebhookEvents
      */
     protected function onSubscriptionDisable(array $payload): Response
     {
+        SubscriptionDisabledEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -201,6 +233,8 @@ trait HandlesWebhookEvents
      */
     protected function onSubscriptionExpiringCards(array $payload): Response
     {
+        SubscriptionExpiringCardsEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -209,6 +243,8 @@ trait HandlesWebhookEvents
      */
     protected function onSubscriptionNotRenew(array $payload): Response
     {
+        SubscriptionNotRenewedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -217,6 +253,8 @@ trait HandlesWebhookEvents
      */
     protected function onTransferFailed(array $payload): Response
     {
+        TransferFailedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -225,6 +263,8 @@ trait HandlesWebhookEvents
      */
     protected function onTransferSuccess(array $payload): Response
     {
+        TransferSucceededEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 
@@ -233,6 +273,8 @@ trait HandlesWebhookEvents
      */
     protected function onTransferReversed(array $payload): Response
     {
+        TransferReversedEvent::dispatch($payload);
+
         return $this->successMethod();
     }
 }
