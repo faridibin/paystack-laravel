@@ -510,16 +510,16 @@
         },
         {
             "name": "faridibin/paystack-php",
-            "version": "v0.2.5",
+            "version": "v0.2.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/faridibin/paystack-php.git",
-                "reference": "49cd381850b3e6346c7ac81c80c9c7dc159f8d11"
+                "reference": "dccaeefcd9ac3f0ab9662125c0435521466c91ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/faridibin/paystack-php/zipball/49cd381850b3e6346c7ac81c80c9c7dc159f8d11",
-                "reference": "49cd381850b3e6346c7ac81c80c9c7dc159f8d11",
+                "url": "https://api.github.com/repos/faridibin/paystack-php/zipball/dccaeefcd9ac3f0ab9662125c0435521466c91ca",
+                "reference": "dccaeefcd9ac3f0ab9662125c0435521466c91ca",
                 "shasum": ""
             },
             "require": {
@@ -556,9 +556,9 @@
             "description": "A modern, type-safe PHP SDK for Paystack payment processing",
             "support": {
                 "issues": "https://github.com/faridibin/paystack-php/issues",
-                "source": "https://github.com/faridibin/paystack-php/tree/v0.2.5"
+                "source": "https://github.com/faridibin/paystack-php/tree/v0.2.6"
             },
-            "time": "2025-11-02T21:41:21+00:00"
+            "time": "2025-11-02T23:12:47+00:00"
         },
         {
             "name": "fruitcake/php-cors",
