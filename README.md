@@ -99,9 +99,7 @@ The package provides a convenient facade for accessing Paystack services:
 use Faridibin\PaystackLaravel\Facades\Paystack;
 
 // Initialize a transaction
-$transaction = Paystack::transactions()->initialize([
-    'email' => 'customer@example.com',
-    'amount' => 50000, // Amount in kobo (₦500.00)
+$transaction = Paystack::transactions()->initialize('customer@example.com', 50000,[
     'currency' => 'NGN',
 ]);
 
