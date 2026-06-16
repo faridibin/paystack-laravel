@@ -1,10 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel;
 
 use Faridibin\Paystack\Paystack as PaystackSDK;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Laravel service provider for the Paystack package.
+ *
+ * Registers the Paystack SDK singleton, publishes configuration files,
+ * loads routes, and registers views.
+ */
 class PaystackServiceProvider extends ServiceProvider
 {
     /**

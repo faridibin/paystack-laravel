@@ -26,9 +26,9 @@
 		}
 	],
 	"require": {
-		"php": "^8.0",
-		"faridibin/paystack-php": "*",
-		"illuminate/support": "*"
+		"php": "^8.2",
+		"faridibin/paystack-php": "^0.3.0",
+		"illuminate/support": "^11.0|^12.0"
 	},
 	"minimum-stability": "dev",
 	"prefer-stable": true,
@@ -53,5 +53,8 @@
 				"Paystack": "Faridibin\\PaystackLaravel\\Facades\\Paystack"
 			}
 		}
+	},
+	"scripts": {
+		"test": "vendor/bin/pest"
 	}
 }

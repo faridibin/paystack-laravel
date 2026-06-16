@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel\Http\Middleware;
 
 use Closure;
@@ -9,6 +11,14 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 
+/**
+ * Middleware that validates incoming Paystack webhook requests.
+ *
+ * Verifies the HMAC-SHA512 signature using the `X-Paystack-Signature` header
+ * and checks that the request originates from a Paystack whitelisted IP address.
+ *
+ * @throws \Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException
+ */
 class ValidateWebhookSignature
 {
     /**

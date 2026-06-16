@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
 use Faridibin\Paystack\Exceptions\PaystackException;
@@ -9,6 +11,11 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
+/**
+ * Handles Paystack transaction display requests.
+ *
+ * Fetches a transaction by ID and returns either a JSON response or a view.
+ */
 class TransactionController extends Controller
 {
     /**
@@ -24,13 +31,13 @@ class TransactionController extends Controller
 
     /**
      * Fetch a transaction.
-     * 
+     *
      * @param Request $request
-     * @param int $id
-     * 
-     * @return void
+     * @param string $id
+     *
+     * @return JsonResponse|View
      */
-    public function fetch(Request $request, int $id): JsonResponse|View
+    public function fetch(Request $request, string $id): JsonResponse|View
     {
         $response = Paystack::transactions()->fetch($id);
 

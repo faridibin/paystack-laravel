@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel\Http\Controllers\Concerns;
 
 use Faridibin\PaystackLaravel\Events\{
@@ -30,6 +32,14 @@ use Faridibin\PaystackLaravel\Events\{
 };
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Provides handler methods for all supported Paystack webhook events.
+ *
+ * Each method dispatches the corresponding Laravel event class and returns
+ * a success response. Add this trait to your webhook controller.
+ *
+ * @see \Faridibin\PaystackLaravel\Http\Controllers\WebhookController
+ */
 trait HandlesWebhookEvents
 {
     /**
@@ -60,6 +70,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle charge dispute remind event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onChargeDisputeRemind(array $payload): Response
     {
@@ -70,6 +83,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle charge dispute resolve event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onChargeDisputeResolve(array $payload): Response
     {
@@ -80,6 +96,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle customer identification failed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onCustomeridentificationFailed(array $payload): Response
     {
@@ -90,6 +109,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle customer identification success event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onCustomeridentificationSuccess(array $payload): Response
     {
@@ -100,6 +122,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle dedicated account assign failed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onDedicatedaccountAssignFailed(array $payload): Response
     {
@@ -110,6 +135,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle dedicated account assign success event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onDedicatedaccountAssignSuccess(array $payload): Response
     {
@@ -120,6 +148,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle invoice create event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onInvoiceCreate(array $payload): Response
     {
@@ -130,6 +161,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle invoice payment failed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onInvoicePaymentFailed(array $payload): Response
     {
@@ -140,6 +174,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle invoice update event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onInvoiceUpdate(array $payload): Response
     {
@@ -150,6 +187,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle payment request pending event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onPaymentrequestPending(array $payload): Response
     {
@@ -160,6 +200,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle payment request success event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onPaymentrequestSuccess(array $payload): Response
     {
@@ -170,6 +213,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle refund failed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onRefundFailed(array $payload): Response
     {
@@ -180,6 +226,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle refund pending event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onRefundPending(array $payload): Response
     {
@@ -190,6 +239,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle refund processed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onRefundProcessed(array $payload): Response
     {
@@ -200,6 +252,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle refund processing event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onRefundProcessing(array $payload): Response
     {
@@ -210,6 +265,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle subscription create event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onSubscriptionCreate(array $payload): Response
     {
@@ -220,6 +278,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle subscription disable event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onSubscriptionDisable(array $payload): Response
     {
@@ -230,6 +291,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle subscription expiring cards event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onSubscriptionExpiringCards(array $payload): Response
     {
@@ -240,6 +304,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle subscription not renew event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onSubscriptionNotRenew(array $payload): Response
     {
@@ -250,6 +317,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle transfer failed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onTransferFailed(array $payload): Response
     {
@@ -260,6 +330,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle transfer success event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onTransferSuccess(array $payload): Response
     {
@@ -270,6 +343,9 @@ trait HandlesWebhookEvents
 
     /**
      * Handle transfer reversed event.
+     *
+     * @param array $payload The webhook event data from Paystack
+     * @return \Symfony\Component\HttpFoundation\Response
      */
     protected function onTransferReversed(array $payload): Response
     {

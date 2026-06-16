@@ -4,222 +4,235 @@
 [![Total Downloads](https://img.shields.io/packagist/dt/faridibin/paystack-laravel.svg?style=flat-square)](https://packagist.org/packages/faridibin/paystack-laravel)
 [![License](https://img.shields.io/packagist/l/faridibin/paystack-laravel.svg?style=flat-square)](https://packagist.org/packages/faridibin/paystack-laravel)
 
-A comprehensive Laravel wrapper for [faridibin/paystack-php](https://github.com/faridibin/paystack-php) with first-class Laravel features including facades, config files, webhook handling, and event dispatching. Provides seamless integration of Paystack payment processing in Laravel applications.
+A Laravel wrapper for [faridibin/paystack-php](https://github.com/faridibin/paystack-php) with service provider, facade, webhook handling, and event dispatching.
 
-## Features
+## Requirements
 
--   🚀 **Laravel Integration** - Native Laravel service provider with auto-discovery
--   🎭 **Facade Support** - Clean, expressive API using Laravel facades
--   ⚙️ **Configuration Management** - Publishable config files with environment variable support
--   🔗 **Webhook Handling** - Built-in webhook controller with signature validation
--   📡 **Event System** - Laravel events for all webhook activities
--   🛡️ **Security** - Automatic webhook signature validation middleware
--   🎯 **Service Selection** - Enable only the Paystack services you need
--   🧪 **Testing Ready** - Comprehensive test suite with Pest PHP
+- PHP 8.2+
+- Laravel 11+
 
 ## Installation
-
-You can install the package via Composer:
 
 ```bash
 composer require faridibin/paystack-laravel
 ```
 
-### Laravel Auto-Discovery
-
-The package will automatically register itself with Laravel's service container. No manual registration required!
+The service provider is auto-discovered — no manual registration needed.
 
 ### Publish Configuration
-
-Publish the configuration file to customize the package settings:
 
 ```bash
 php artisan vendor:publish --tag=paystack-config
 ```
 
-This will create a `config/paystack.php` file in your application.
-
-### Publish Views (Optional)
-
-If you want to customize the transaction views:
-
-```bash
-php artisan vendor:publish --provider="Faridibin\PaystackLaravel\PaystackServiceProvider"
-```
-
-## Configuration
+This creates `config/paystack.php` in your application.
 
 ### Environment Variables
 
-Add your Paystack credentials to your `.env` file:
+Add your Paystack secret key to `.env`:
 
 ```env
 PAYSTACK_SECRET_KEY=sk_test_your_secret_key_here
 PAYSTACK_CURRENCY=NGN
 ```
 
-### Service Configuration
-
-The package allows you to enable only the Paystack services you need. Edit `config/paystack.php`:
-
-```php
-'services' => [
-    PaystackServices::commerce([
-        'products' => true,
-        'paymentPages' => true,
-    ]),
-    PaystackServices::payments([
-        'transactions' => true,
-        'customers' => true,
-        'refunds' => true,
-        // ... other payment services
-    ]),
-    PaystackServices::recurring([
-        'plans' => true,
-        'subscriptions' => true,
-    ]),
-    PaystackServices::transfers([
-        'transfers' => true,
-        'recipients' => true,
-        'control' => true,
-    ]),
-    PaystackServices::integration(),
-    PaystackServices::verification(),
-    PaystackServices::miscellaneous(),
-],
-```
-
 ## Usage
 
-### Using the Facade
-
-The package provides a convenient facade for accessing Paystack services:
+### Facade
 
 ```php
 use Faridibin\PaystackLaravel\Facades\Paystack;
 
 // Initialize a transaction
-$transaction = Paystack::transactions()->initialize(
-    email: 'customer@example.com',
-    amount: 50000,
-    optional: ['currency' => 'NGN']
-);
+$response = Paystack::transactions()->initialize(amount: 50000, email: 'customer@example.com');
+$authUrl  = $response->getData()->authorization_url;
 
 // Verify a transaction
-$verification = Paystack::transactions()->verify('transaction_reference');
+Paystack::transactions()->verify('ref_abc123');
 
 // Create a customer
-$customer = Paystack::customers()->create([
-    'email' => 'customer@example.com',
+Paystack::customers()->create([
+    'email'      => 'john@example.com',
     'first_name' => 'John',
-    'last_name' => 'Doe',
+    'last_name'  => 'Doe',
 ]);
 
 // Create a plan
-$plan = Paystack::plans()->create([
-    'name' => 'Monthly Subscription',
-    'amount' => 10000, // ₦100.00
-    'interval' => 'monthly',
-]);
+Paystack::plans()->create('Monthly', amount: 10000, interval: 'monthly');
+
+// Initiate a transfer (reference must be unique per request — required for idempotency)
+Paystack::transfers()->initiateTransfer(
+    amount:    5000,
+    recipient: 'RCP_xxx',
+    reference: 'salary_2026_04_15',
+    optional:  ['reason' => 'Salary'],
+);
 ```
 
 ### Available Services
 
-The facade provides access to all Paystack services:
+#### Commerce
 
-#### Commerce Services
+| Facade call                | Service       |
+| -------------------------- | ------------- |
+| `Paystack::products()`     | Products      |
+| `Paystack::paymentPages()` | Payment Pages |
 
--   `Paystack::products()` - Product management
--   `Paystack::paymentPages()` - Payment page management
+#### Payments
 
-#### Payment Services
+| Facade call                    | Service            |
+| ------------------------------ | ------------------ |
+| `Paystack::transactions()`     | Transactions       |
+| `Paystack::splits()`           | Transaction Splits |
+| `Paystack::customers()`        | Customers          |
+| `Paystack::charge()`           | Charge             |
+| `Paystack::bulkCharges()`      | Bulk Charges       |
+| `Paystack::refunds()`          | Refunds            |
+| `Paystack::subaccounts()`      | Subaccounts        |
+| `Paystack::disputes()`         | Disputes           |
+| `Paystack::settlements()`      | Settlements        |
+| `Paystack::paymentRequests()`  | Payment Requests   |
+| `Paystack::dedicatedAccount()` | Dedicated Accounts |
+| `Paystack::terminal()`         | Terminal           |
+| `Paystack::applepay()`         | Apple Pay          |
 
--   `Paystack::transactions()` - Transaction management
--   `Paystack::customers()` - Customer management
--   `Paystack::splits()` - Transaction splits
--   `Paystack::charge()` - Direct charges
--   `Paystack::refunds()` - Refund management
--   `Paystack::disputes()` - Dispute handling
--   `Paystack::settlements()` - Settlement information
--   `Paystack::subaccounts()` - Subaccount management
--   `Paystack::bulkCharges()` - Bulk charging
--   `Paystack::paymentRequests()` - Payment requests
--   `Paystack::terminal()` - Terminal management
--   `Paystack::applepay()` - Apple Pay integration
+#### Recurring
 
-#### Recurring Services
+| Facade call                 | Service       |
+| --------------------------- | ------------- |
+| `Paystack::plans()`         | Plans         |
+| `Paystack::subscriptions()` | Subscriptions |
 
--   `Paystack::plans()` - Subscription plans
--   `Paystack::subscriptions()` - Subscription management
+#### Transfers
 
-#### Transfer Services
+| Facade call              | Service             |
+| ------------------------ | ------------------- |
+| `Paystack::transfers()`  | Transfers           |
+| `Paystack::recipients()` | Transfer Recipients |
+| `Paystack::control()`    | Transfer Control    |
 
--   `Paystack::transfers()` - Transfer management
--   `Paystack::recipients()` - Transfer recipients
--   `Paystack::control()` - Transfer controls
+#### Other
 
-#### Other Services
+| Facade call                   | Service          |
+| ----------------------------- | ---------------- |
+| `Paystack::integration()`     | Integration      |
+| `Paystack::verification()`    | Verification     |
+| `Paystack::miscellaneous()`   | Miscellaneous    |
+| `Paystack::balance()`         | Balance          |
+| `Paystack::directDebit()`     | Direct Debit     |
+| `Paystack::virtualTerminal()` | Virtual Terminal |
+| `Paystack::storefront()`      | Storefront       |
+| `Paystack::order()`           | Order            |
 
--   `Paystack::integration()` - Integration utilities
--   `Paystack::verification()` - Identity verification
--   `Paystack::miscellaneous()` - Miscellaneous utilities
+## Service Configuration
+
+Enable only the services you need in `config/paystack.php`:
+
+```php
+use Faridibin\PaystackLaravel\PaystackServices;
+
+'services' => [
+    PaystackServices::payments([
+        'transactions' => true,
+        'customers'    => true,
+        'refunds'      => true,
+    ]),
+    PaystackServices::recurring([
+        'plans'         => true,
+        'subscriptions' => true,
+    ]),
+    PaystackServices::transfers([
+        'transfers'  => true,
+        'recipients' => true,
+    ]),
+    PaystackServices::miscellaneous(),
+],
+```
+
+Calling a group method with no arguments enables all services in that group:
+
+```php
+PaystackServices::payments()  // enables all payment services
+PaystackServices::transfers() // enables all transfer services
+```
 
 ## Webhook Handling
 
-The package provides built-in webhook handling with automatic signature validation.
+### Endpoint
 
-### Webhook Endpoint
-
-The package automatically registers a webhook endpoint at:
+The package registers a webhook route automatically:
 
 ```
 POST /paystack/webhook
 ```
 
-### Webhook Events
+Incoming requests are validated against the `X-Paystack-Signature` header and the caller's IP address (Paystack's published IP whitelist) before any event is dispatched.
 
-All webhook events are automatically dispatched as Laravel events:
+### Events
+
+Every valid webhook dispatches `WebhookReceived`. If a specific handler exists on the controller, `WebhookHandled` is also dispatched after it runs.
 
 ```php
 use Faridibin\PaystackLaravel\Events\WebhookReceived;
 use Faridibin\PaystackLaravel\Events\WebhookHandled;
 
-// Listen for any webhook
+// Fired for every valid webhook
 Event::listen(WebhookReceived::class, function (WebhookReceived $event) {
-    // $event->event - The webhook event type
-    // $event->data - The webhook payload
+    // $event->event  → WebhookEvent enum case
+    // $event->data   → payload array
 });
 
-// Listen for successful webhook processing
 Event::listen(WebhookHandled::class, function (WebhookHandled $event) {
-    // Webhook was successfully processed
+    // fired after a specific handler ran
 });
 ```
 
-### Specific Webhook Events
+### Specific webhook events
 
-The package also dispatches specific events for each webhook type:
+The package ships a dedicated event class for every Paystack webhook type:
+
+| Event class                          | Paystack event                    |
+| ------------------------------------ | --------------------------------- |
+| `ChargeSuccessEvent`                 | `charge.success`                  |
+| `ChargeDisputeCreatedEvent`          | `charge.dispute.create`           |
+| `ChargeDisputeRemindEvent`           | `charge.dispute.remind`           |
+| `ChargeDisputeResolvedEvent`         | `charge.dispute.resolve`          |
+| `TransferSucceededEvent`             | `transfer.success`                |
+| `TransferFailedEvent`                | `transfer.failed`                 |
+| `TransferReversedEvent`              | `transfer.reversed`               |
+| `SubscriptionCreatedEvent`           | `subscription.create`             |
+| `SubscriptionDisabledEvent`          | `subscription.disable`            |
+| `SubscriptionNotRenewedEvent`        | `subscription.not_renew`          |
+| `SubscriptionExpiringCardsEvent`     | `subscription.expiring_cards`     |
+| `InvoiceCreatedEvent`                | `invoice.create`                  |
+| `InvoiceUpdateEvent`                 | `invoice.update`                  |
+| `InvoicePaymentFailedEvent`          | `invoice.payment_failed`          |
+| `PaymentrequestPendingEvent`         | `paymentrequest.pending`          |
+| `PaymentrequestSucceededEvent`       | `paymentrequest.success`          |
+| `RefundProcessedEvent`               | `refund.processed`                |
+| `RefundPendingEvent`                 | `refund.pending`                  |
+| `RefundFailedEvent`                  | `refund.failed`                   |
+| `RefundProcessingEvent`              | `refund.processing`               |
+| `CustomeridentificationSuccessEvent` | `customeridentification.success`  |
+| `CustomeridentificationFailedEvent`  | `customeridentification.failed`   |
+| `DedicatedaccountAssignSuccessEvent` | `dedicatedaccount.assign.success` |
+| `DedicatedaccountAssignFailedEvent`  | `dedicatedaccount.assign.failed`  |
 
 ```php
 use Faridibin\PaystackLaravel\Events\ChargeSuccessEvent;
-use Faridibin\PaystackLaravel\Events\SubscriptionCreatedEvent;
 
 Event::listen(ChargeSuccessEvent::class, function (ChargeSuccessEvent $event) {
-    // Handle successful charge
-});
-
-Event::listen(SubscriptionCreatedEvent::class, function (SubscriptionCreatedEvent $event) {
-    // Handle new subscription
+    // $event->data — the webhook payload's data array
+    $reference = $event->data['reference'];
+    // fulfil the order...
 });
 ```
 
-### Custom Webhook Handling
+### Custom webhook handling
 
-You can extend the webhook controller to add custom handling:
+Extend the webhook controller and add `on<EventName>` methods. The method name is derived by converting the Paystack event to camel case (e.g. `charge.success` → `onChargeSuccess`):
 
 ```php
-<?php
-
 namespace App\Http\Controllers;
 
 use Faridibin\PaystackLaravel\Http\Controllers\WebhookController as BaseWebhookController;
@@ -227,106 +240,48 @@ use Symfony\Component\HttpFoundation\Response;
 
 class PaystackWebhookController extends BaseWebhookController
 {
-    /**
-     * Handle charge.success webhook
-     */
     protected function onChargeSuccess(array $data): Response
     {
-        // Custom logic for successful charges
-        $transaction = $data['data'];
-
-        // Update your database, send notifications, etc.
-
+        // $data is the webhook payload's data array
+        // update order status, send receipt, etc.
         return $this->successMethod();
     }
 
-    /**
-     * Handle subscription.create webhook
-     */
-    protected function onSubscriptionCreate(array $data): Response
+    protected function onTransferSuccess(array $data): Response
     {
-        // Custom logic for new subscriptions
-        $subscription = $data['data'];
-
         return $this->successMethod();
     }
 }
 ```
 
-Then update your route to use your custom controller:
+Then register the route pointing to your controller in your application's `routes/web.php`:
 
 ```php
-Route::post('paystack/webhook', [PaystackWebhookController::class, 'handle']);
+Route::post('paystack/webhook', [PaystackWebhookController::class, 'handle'])
+    ->middleware(\Faridibin\PaystackLaravel\Http\Middleware\ValidateWebhookSignature::class);
 ```
 
 ## Routes
 
-The package provides these routes by default:
+| Method | URI                          | Name                         |
+| ------ | ---------------------------- | ---------------------------- |
+| `GET`  | `/paystack/transaction/{id}` | `paystack.transaction.fetch` |
+| `POST` | `/paystack/webhook`          | `paystack.webhook.handle`    |
 
--   `GET /paystack/transaction/{id}` - Fetch transaction details
--   `POST /paystack/webhook` - Handle Paystack webhooks
-
-You can disable routes in the config:
-
-```php
-'routes' => [
-    'enabled' => false, // Disable all routes
-],
-```
-
-## Middleware
-
-### Webhook Signature Validation
-
-The package includes middleware to validate webhook signatures automatically:
+Disable all routes:
 
 ```php
 'routes' => [
-    'middleware' => [
-        'webhook.handle' => [
-            ValidateWebhookSignature::class
-        ]
-    ]
+    'enabled' => false,
 ],
 ```
 
 ## Testing
 
-Run the test suite:
-
 ```bash
 composer test
 ```
 
-The package includes comprehensive tests using Pest PHP.
-
-## Security
-
-If you discover any security-related issues, please email [faridibin@gmail.com](mailto:faridibin@gmail.com) instead of using the issue tracker.
-
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-## Credits
-
--   [Farid Adam](https://github.com/faridibin)
--   [All Contributors](../../contributors)
-
 ## License
 
-The MIT License (MIT). Please see [License File](LICENSE) for more information.
-
-## Changelog
-
-Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
-
-## Support
-
--   📧 Email: [faridibin@gmail.com](mailto:faridibin@gmail.com)
--   🌐 Website: [https://faridibin.tech](https://faridibin.tech)
--   📖 Documentation: [Paystack API Documentation](https://paystack.com/docs/api/)
-
----
-
-Built with ❤️ for the Laravel community
+MIT

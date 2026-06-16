@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel\Http\Requests;
 
 use Faridibin\Paystack\Enums\WebhookEvent;
@@ -9,6 +11,12 @@ use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
+/**
+ * Form request for validating incoming Paystack webhook payloads.
+ *
+ * Ensures the `event` field is a recognized Paystack webhook event type
+ * and that `data` is present as an array.
+ */
 class WebhookRequest extends FormRequest
 {
     /**
@@ -28,7 +36,7 @@ class WebhookRequest extends FormRequest
     {
         return [
             'event' => ['required', 'string', Rule::in(WebhookEvent::values())],
-            'data' => ['required', 'array'],
+            'data' => ['present', 'array'],
         ];
     }
 

@@ -1,0 +1,57 @@
+name: Tests
+
+on:
+  workflow_call:
+
+jobs:
+
+  # ── Feature/Unit tests ───────────────────────────────────────────────────────
+  # Testbench boots a real Laravel kernel, so we test across the supported
+  # framework range (Laravel 11/12) by overriding the orchestra/testbench version
+  # per leg — its major maps 1:1 to a Laravel major (9→L11, 10→L12).
+  # Laravel 10 is not tested: pestphp/pest ^3.6 pulls nunomaduro/collision ^8,
+  # which requires laravel/framework >=11.48 — so the toolchain cannot run on L10.
+  # Laravel 11's PHP floor (8.2) is therefore the package's effective floor.
+  test:
+    name: PHP ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: '8.2', laravel: 11, testbench: '^9.0' }
+          - { php: '8.3', laravel: 11, testbench: '^9.0' }
+          - { php: '8.4', laravel: 11, testbench: '^9.0' }
+          - { php: '8.2', laravel: 12, testbench: '^10.0' }
+          - { php: '8.3', laravel: 12, testbench: '^10.0' }
+          - { php: '8.4', laravel: 12, testbench: '^10.0' }
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json, curl, mbstring
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v5
+        with:
+          path: vendor
+          key: laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-
+
+      # Pin the framework for this leg, then resolve. Testbench pulls in the
+      # matching illuminate/* packages, so only its constraint needs overriding.
+      - name: Select Laravel ${{ matrix.laravel }}
+        run: composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-interaction --no-update
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Run tests
+        run: vendor/bin/pest --colors=always
