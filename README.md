@@ -72,52 +72,57 @@ Paystack::transfers()->initiateTransfer(
 ### Available Services
 
 #### Commerce
-| Facade call | Service |
-|---|---|
-| `Paystack::products()` | Products |
+
+| Facade call                | Service       |
+| -------------------------- | ------------- |
+| `Paystack::products()`     | Products      |
 | `Paystack::paymentPages()` | Payment Pages |
 
 #### Payments
-| Facade call | Service |
-|---|---|
-| `Paystack::transactions()` | Transactions |
-| `Paystack::splits()` | Transaction Splits |
-| `Paystack::customers()` | Customers |
-| `Paystack::charge()` | Charge |
-| `Paystack::bulkCharges()` | Bulk Charges |
-| `Paystack::refunds()` | Refunds |
-| `Paystack::subaccounts()` | Subaccounts |
-| `Paystack::disputes()` | Disputes |
-| `Paystack::settlements()` | Settlements |
-| `Paystack::paymentRequests()` | Payment Requests |
+
+| Facade call                    | Service            |
+| ------------------------------ | ------------------ |
+| `Paystack::transactions()`     | Transactions       |
+| `Paystack::splits()`           | Transaction Splits |
+| `Paystack::customers()`        | Customers          |
+| `Paystack::charge()`           | Charge             |
+| `Paystack::bulkCharges()`      | Bulk Charges       |
+| `Paystack::refunds()`          | Refunds            |
+| `Paystack::subaccounts()`      | Subaccounts        |
+| `Paystack::disputes()`         | Disputes           |
+| `Paystack::settlements()`      | Settlements        |
+| `Paystack::paymentRequests()`  | Payment Requests   |
 | `Paystack::dedicatedAccount()` | Dedicated Accounts |
-| `Paystack::terminal()` | Terminal |
-| `Paystack::applepay()` | Apple Pay |
+| `Paystack::terminal()`         | Terminal           |
+| `Paystack::applepay()`         | Apple Pay          |
 
 #### Recurring
-| Facade call | Service |
-|---|---|
-| `Paystack::plans()` | Plans |
+
+| Facade call                 | Service       |
+| --------------------------- | ------------- |
+| `Paystack::plans()`         | Plans         |
 | `Paystack::subscriptions()` | Subscriptions |
 
 #### Transfers
-| Facade call | Service |
-|---|---|
-| `Paystack::transfers()` | Transfers |
+
+| Facade call              | Service             |
+| ------------------------ | ------------------- |
+| `Paystack::transfers()`  | Transfers           |
 | `Paystack::recipients()` | Transfer Recipients |
-| `Paystack::control()` | Transfer Control |
+| `Paystack::control()`    | Transfer Control    |
 
 #### Other
-| Facade call | Service |
-|---|---|
-| `Paystack::integration()` | Integration |
-| `Paystack::verification()` | Verification |
-| `Paystack::miscellaneous()` | Miscellaneous |
-| `Paystack::balance()` | Balance |
-| `Paystack::directDebit()` | Direct Debit |
+
+| Facade call                   | Service          |
+| ----------------------------- | ---------------- |
+| `Paystack::integration()`     | Integration      |
+| `Paystack::verification()`    | Verification     |
+| `Paystack::miscellaneous()`   | Miscellaneous    |
+| `Paystack::balance()`         | Balance          |
+| `Paystack::directDebit()`     | Direct Debit     |
 | `Paystack::virtualTerminal()` | Virtual Terminal |
-| `Paystack::storefront()` | Storefront |
-| `Paystack::order()` | Order |
+| `Paystack::storefront()`      | Storefront       |
+| `Paystack::order()`           | Order            |
 
 ## Service Configuration
 
@@ -186,32 +191,32 @@ Event::listen(WebhookHandled::class, function (WebhookHandled $event) {
 
 The package ships a dedicated event class for every Paystack webhook type:
 
-| Event class | Paystack event |
-|---|---|
-| `ChargeSuccessEvent` | `charge.success` |
-| `ChargeDisputeCreatedEvent` | `charge.dispute.create` |
-| `ChargeDisputeRemindEvent` | `charge.dispute.remind` |
-| `ChargeDisputeResolvedEvent` | `charge.dispute.resolve` |
-| `TransferSucceededEvent` | `transfer.success` |
-| `TransferFailedEvent` | `transfer.failed` |
-| `TransferReversedEvent` | `transfer.reversed` |
-| `SubscriptionCreatedEvent` | `subscription.create` |
-| `SubscriptionDisabledEvent` | `subscription.disable` |
-| `SubscriptionNotRenewedEvent` | `subscription.not_renew` |
-| `SubscriptionExpiringCardsEvent` | `subscription.expiring_cards` |
-| `InvoiceCreatedEvent` | `invoice.create` |
-| `InvoiceUpdateEvent` | `invoice.update` |
-| `InvoicePaymentFailedEvent` | `invoice.payment_failed` |
-| `PaymentrequestPendingEvent` | `paymentrequest.pending` |
-| `PaymentrequestSucceededEvent` | `paymentrequest.success` |
-| `RefundProcessedEvent` | `refund.processed` |
-| `RefundPendingEvent` | `refund.pending` |
-| `RefundFailedEvent` | `refund.failed` |
-| `RefundProcessingEvent` | `refund.processing` |
-| `CustomeridentificationSuccessEvent` | `customeridentification.success` |
-| `CustomeridentificationFailedEvent` | `customeridentification.failed` |
+| Event class                          | Paystack event                    |
+| ------------------------------------ | --------------------------------- |
+| `ChargeSuccessEvent`                 | `charge.success`                  |
+| `ChargeDisputeCreatedEvent`          | `charge.dispute.create`           |
+| `ChargeDisputeRemindEvent`           | `charge.dispute.remind`           |
+| `ChargeDisputeResolvedEvent`         | `charge.dispute.resolve`          |
+| `TransferSucceededEvent`             | `transfer.success`                |
+| `TransferFailedEvent`                | `transfer.failed`                 |
+| `TransferReversedEvent`              | `transfer.reversed`               |
+| `SubscriptionCreatedEvent`           | `subscription.create`             |
+| `SubscriptionDisabledEvent`          | `subscription.disable`            |
+| `SubscriptionNotRenewedEvent`        | `subscription.not_renew`          |
+| `SubscriptionExpiringCardsEvent`     | `subscription.expiring_cards`     |
+| `InvoiceCreatedEvent`                | `invoice.create`                  |
+| `InvoiceUpdateEvent`                 | `invoice.update`                  |
+| `InvoicePaymentFailedEvent`          | `invoice.payment_failed`          |
+| `PaymentrequestPendingEvent`         | `paymentrequest.pending`          |
+| `PaymentrequestSucceededEvent`       | `paymentrequest.success`          |
+| `RefundProcessedEvent`               | `refund.processed`                |
+| `RefundPendingEvent`                 | `refund.pending`                  |
+| `RefundFailedEvent`                  | `refund.failed`                   |
+| `RefundProcessingEvent`              | `refund.processing`               |
+| `CustomeridentificationSuccessEvent` | `customeridentification.success`  |
+| `CustomeridentificationFailedEvent`  | `customeridentification.failed`   |
 | `DedicatedaccountAssignSuccessEvent` | `dedicatedaccount.assign.success` |
-| `DedicatedaccountAssignFailedEvent` | `dedicatedaccount.assign.failed` |
+| `DedicatedaccountAssignFailedEvent`  | `dedicatedaccount.assign.failed`  |
 
 ```php
 use Faridibin\PaystackLaravel\Events\ChargeSuccessEvent;
@@ -258,10 +263,10 @@ Route::post('paystack/webhook', [PaystackWebhookController::class, 'handle'])
 
 ## Routes
 
-| Method | URI | Name |
-|---|---|---|
-| `GET` | `/paystack/transaction/{id}` | `paystack.transaction.fetch` |
-| `POST` | `/paystack/webhook` | `paystack.webhook.handle` |
+| Method | URI                          | Name                         |
+| ------ | ---------------------------- | ---------------------------- |
+| `GET`  | `/paystack/transaction/{id}` | `paystack.transaction.fetch` |
+| `POST` | `/paystack/webhook`          | `paystack.webhook.handle`    |
 
 Disable all routes:
 
