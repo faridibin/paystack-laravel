@@ -8,8 +8,8 @@ A Laravel wrapper for [faridibin/paystack-php](https://github.com/faridibin/pays
 
 ## Requirements
 
-- PHP 8.0+
-- Laravel 10+
+- PHP 8.2+
+- Laravel 11+
 
 ## Installation
 
