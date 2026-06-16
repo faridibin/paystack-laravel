@@ -30,7 +30,7 @@ return  [
     |
     */
 
-    'currency' => env('PAYSTACK_CURRENCY', Currency::NGN),
+    'currency' => env('PAYSTACK_CURRENCY', Currency::NGN->value),
 
     /*
     |--------------------------------------------------------------------------
@@ -61,6 +61,7 @@ return  [
             'settlements' => true,
             'subaccounts' => true,
             'terminal' => true,
+            'dedicatedAccount' => true,
         ]),
         PaystackServices::recurring([
             'plans' => true,
@@ -74,6 +75,11 @@ return  [
         PaystackServices::integration(),
         PaystackServices::verification(),
         PaystackServices::miscellaneous(),
+        PaystackServices::balance(),
+        PaystackServices::virtualTerminal(),
+        PaystackServices::directDebit(),
+        PaystackServices::storefront(),
+        PaystackServices::order(),
     ],
 
     /*

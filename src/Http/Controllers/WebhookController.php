@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel\Http\Controllers;
 
 use Faridibin\Paystack\Enums\WebhookEvent;
@@ -10,6 +12,14 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Str;
 use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Handles incoming Paystack webhook requests.
+ *
+ * Dispatches the appropriate Laravel event based on the webhook event type.
+ * Extend this controller in your application to add custom webhook handling methods.
+ *
+ * @see \Faridibin\PaystackLaravel\Http\Controllers\Concerns\HandlesWebhookEvents
+ */
 class WebhookController extends Controller
 {
     use HandlesWebhookEvents;
@@ -82,6 +92,6 @@ class WebhookController extends Controller
     {
         $string = Str::of($event)->replace('.', ' ')->ucfirst()->camel();
 
-        return sprintf('on%s', ucfirst($string));
+        return sprintf('on%s', ucfirst((string) $string));
     }
 }

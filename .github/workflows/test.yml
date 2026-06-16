@@ -1,0 +1,80 @@
+name: Tests
+
+on:
+  workflow_call:
+
+jobs:
+
+  # ── Feature/Unit tests ───────────────────────────────────────────────────────
+  # Testbench boots a real Laravel kernel, so we test across the supported
+  # framework range (Laravel 10/11/12) by overriding the orchestra/testbench
+  # version per leg — its major maps 1:1 to a Laravel major (8→L10, 9→L11, 10→L12).
+  # PHP floor is 8.2 here because the dev toolchain (pestphp/pest ^3) requires it;
+  # 8.1 runtime support is verified by the `floor` job below.
+  test:
+    name: PHP ${{ matrix.php }} · Laravel ${{ matrix.laravel }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { php: '8.2', laravel: 10, testbench: '^8.0' }
+          - { php: '8.3', laravel: 10, testbench: '^8.0' }
+          - { php: '8.2', laravel: 11, testbench: '^9.0' }
+          - { php: '8.3', laravel: 11, testbench: '^9.0' }
+          - { php: '8.4', laravel: 11, testbench: '^9.0' }
+          - { php: '8.2', laravel: 12, testbench: '^10.0' }
+          - { php: '8.3', laravel: 12, testbench: '^10.0' }
+          - { php: '8.4', laravel: 12, testbench: '^10.0' }
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP ${{ matrix.php }}
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          extensions: json, curl, mbstring
+          coverage: none
+
+      - name: Cache Composer packages
+        uses: actions/cache@v5
+        with:
+          path: vendor
+          key: laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-${{ hashFiles('composer.json') }}
+          restore-keys: laravel-${{ matrix.laravel }}-php-${{ matrix.php }}-
+
+      # Pin the framework for this leg, then resolve. Testbench pulls in the
+      # matching illuminate/* packages, so only its constraint needs overriding.
+      - name: Select Laravel ${{ matrix.laravel }}
+        run: composer require "orchestra/testbench:${{ matrix.testbench }}" --dev --no-interaction --no-update
+
+      - name: Install dependencies
+        run: composer update --prefer-dist --no-progress --no-interaction
+
+      - name: Run tests
+        run: vendor/bin/pest --colors=always
+
+  # ── PHP 8.1 runtime floor ────────────────────────────────────────────────────
+  # The package supports PHP 8.1 (Laravel 10 runs on 8.1), but the dev toolchain
+  # (Pest 3) requires 8.2, so the suite can't run there. A syntax lint needs no
+  # dependencies — this parses every source file on 8.1, backing the `"php": "^8.1"`
+  # claim in composer.json.
+  floor:
+    name: Floor — PHP 8.1 (lint)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Setup PHP 8.1
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: none
+
+      - name: Lint sources on PHP 8.1
+        run: find src -name '*.php' -print0 | xargs -0 -n1 -P4 php -l

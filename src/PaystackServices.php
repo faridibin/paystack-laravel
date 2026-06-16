@@ -1,9 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Faridibin\PaystackLaravel;
 
 use Faridibin\Paystack\{Contracts, Services};
+use Faridibin\Paystack\Contracts\Services\{BalanceInterface, DirectDebitInterface, OrderInterface, StorefrontInterface, VirtualTerminalInterface};
+use Faridibin\Paystack\Services\{Balance, DirectDebit, Order, Storefront, VirtualTerminal};
 
+/**
+ * Registry of all available Paystack services.
+ *
+ * Used by the service provider to register enabled services with the SDK.
+ * Services can be selectively enabled via the `paystack.services` config array.
+ */
 class PaystackServices
 {
     /**
@@ -30,6 +40,7 @@ class PaystackServices
         'disputes' => [Services\Payments\Disputes::class, Contracts\Services\Payments\DisputesInterface::class],
         'paymentRequests' => [Services\Payments\PaymentRequests::class, Contracts\Services\Payments\PaymentRequestsInterface::class],
         'refunds' => [Services\Payments\Refunds::class, Contracts\Services\Payments\RefundsInterface::class],
+        'dedicatedAccount' => [Services\Payments\DedicatedAccount::class, Contracts\Services\Payments\DedicatedAccountInterface::class],
     ];
 
     /**
@@ -62,10 +73,15 @@ class PaystackServices
         return isset($enabledServices[$service]);
     }
 
+    /**
+     * Determine if the given service is enabled.
+     *
+     * @param  string  $service
+     * @return bool
+     */
     public static function serviceEnabled(string $service): bool
     {
-        // TODO: Implement serviceEnabled() method.
-        return true;
+        return isset(static::getEnabledServices()[$service]);
     }
 
     /**
@@ -167,6 +183,76 @@ class PaystackServices
 
         return [
             'miscellaneous' => [Services\Miscellaneous::class, Contracts\Services\MiscellaneousInterface::class]
+        ];
+    }
+
+    /**
+     * Enable the balance service.
+     */
+    public static function balance(bool $enable = true): array
+    {
+        if (!$enable) {
+            return [];
+        }
+
+        return [
+            'balance' => [Balance::class, BalanceInterface::class]
+        ];
+    }
+
+    /**
+     * Enable the virtual terminal service.
+     */
+    public static function virtualTerminal(bool $enable = true): array
+    {
+        if (!$enable) {
+            return [];
+        }
+
+        return [
+            'virtualTerminal' => [VirtualTerminal::class, VirtualTerminalInterface::class]
+        ];
+    }
+
+    /**
+     * Enable the direct debit service.
+     */
+    public static function directDebit(bool $enable = true): array
+    {
+        if (!$enable) {
+            return [];
+        }
+
+        return [
+            'directDebit' => [DirectDebit::class, DirectDebitInterface::class]
+        ];
+    }
+
+    /**
+     * Enable the storefront service.
+     */
+    public static function storefront(bool $enable = true): array
+    {
+        if (!$enable) {
+            return [];
+        }
+
+        return [
+            'storefront' => [Storefront::class, StorefrontInterface::class]
+        ];
+    }
+
+    /**
+     * Enable the order service.
+     */
+    public static function order(bool $enable = true): array
+    {
+        if (!$enable) {
+            return [];
+        }
+
+        return [
+            'order' => [Order::class, OrderInterface::class]
         ];
     }
 
